@@ -1,24 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-function App() {
+//Custom Theme
+import { ThemeProvider } from "styled-components";
+import { theme } from "./theme";
+
+//Pages
+import { HomePage, FavoritesPage } from './pages'
+import { listDevelopers } from "./redux/developer/developer.actions";
+
+import { useDispatch } from 'react-redux'
+import { listCurrencies } from "./redux/currency/currency.actions";
+
+
+const App = () => {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(listDevelopers())
+    dispatch(listCurrencies())
+  }, [
+    dispatch
+  ])
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <Router>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/favorites" element={<FavoritesPage />} />
+        </Routes>
+      </Router>
+    </ThemeProvider>
   );
 }
 
